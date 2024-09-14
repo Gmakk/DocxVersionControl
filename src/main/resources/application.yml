@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+storage:
+  location: upload-dir
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 128KB
+      max-request-size: 128KB
+  application:
+    name: DocxVersionControl
+
