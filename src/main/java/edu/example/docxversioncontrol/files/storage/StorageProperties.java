@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files;
+package edu.example.docxversioncontrol.files.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

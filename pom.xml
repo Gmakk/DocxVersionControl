@@ -28,6 +28,7 @@
     </scm>
     <properties>
         <java.version>17</java.version>
+        <docx4j.version>11.5.0</docx4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -70,9 +71,15 @@
         </dependency>
         <dependency>
             <groupId>org.docx4j</groupId>
-            <artifactId>docx4j-core</artifactId>
-            <version>11.5.0</version>
+            <artifactId>docx4j-JAXB-ReferenceImpl</artifactId>
+            <version>${docx4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.docx4j</groupId>
+            <artifactId>docx4j-diffx</artifactId>
+            <version>${docx4j.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

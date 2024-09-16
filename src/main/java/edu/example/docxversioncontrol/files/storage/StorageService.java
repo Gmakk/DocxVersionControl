@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files;
+package edu.example.docxversioncontrol.files.storage;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

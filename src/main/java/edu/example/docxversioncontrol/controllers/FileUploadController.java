@@ -3,8 +3,8 @@ package edu.example.docxversioncontrol.controllers;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
-import edu.example.docxversioncontrol.files.StorageFileNotFoundException;
-import edu.example.docxversioncontrol.files.StorageService;
+import edu.example.docxversioncontrol.files.storage.StorageFileNotFoundException;
+import edu.example.docxversioncontrol.files.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

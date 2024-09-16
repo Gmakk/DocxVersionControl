@@ -1,8 +1,7 @@
 package edu.example.docxversioncontrol;
 
-import edu.example.docxversioncontrol.files.StorageProperties;
-import edu.example.docxversioncontrol.files.StorageService;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import edu.example.docxversioncontrol.files.storage.StorageProperties;
+import edu.example.docxversioncontrol.files.storage.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
