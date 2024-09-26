@@ -65,6 +65,7 @@ public class CompareDocuments {
     static boolean PDF_SAVE = false;
 
 
+    //TODO считать размер документа и  если большой, то включать?
     /**
      * Split up the problem to try to solve more quickly
      * (you might try this when you have 500 entries or more)
@@ -73,9 +74,13 @@ public class CompareDocuments {
 
 
     /**
-     * @param args
+     * Метод для сравнения 2 документов
+     * @param oldPath путь к первому файлу
+     * @param newPath путь ко второму файлу
+     * @return тело нового документа, в котором добавления обернуты в w:ins, а удаления в w:del
+     * @throws Exception
      */
-    public static void main(String[] args) throws Exception {
+    public static Body getComparisonResult(String oldPath, String newPath) throws Exception {
 
         String newerfilepath = System.getProperty("user.dir") + "/upload-dir/test2.docx";
         String olderfilepath = System.getProperty("user.dir") + "/upload-dir/test.docx";
@@ -177,6 +182,8 @@ public class CompareDocuments {
             System.out.println("Saved " + System.getProperty("user.dir")  +  "/OUT_CompareDocuments.pdf");
         }
 
+
+        return newBody;
     }
 
     /**
