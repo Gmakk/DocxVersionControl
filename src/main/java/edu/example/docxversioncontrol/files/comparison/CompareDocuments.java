@@ -82,12 +82,9 @@ public class CompareDocuments {
      */
     public static Body getComparisonResult(String oldPath, String newPath) throws Exception {
 
-        String newerfilepath = System.getProperty("user.dir") + "/upload-dir/test2.docx";
-        String olderfilepath = System.getProperty("user.dir") + "/upload-dir/test.docx";
-
         // 1. Load the Packages
-        WordprocessingMLPackage newerPackage = WordprocessingMLPackage.load(new java.io.File(newerfilepath));
-        WordprocessingMLPackage olderPackage = WordprocessingMLPackage.load(new java.io.File(olderfilepath));
+        WordprocessingMLPackage newerPackage = WordprocessingMLPackage.load(new java.io.File(newPath));
+        WordprocessingMLPackage olderPackage = WordprocessingMLPackage.load(new java.io.File(oldPath));
 
         Body newerBody = ((Document)newerPackage.getMainDocumentPart().getJaxbElement()).getBody();
         Body olderBody = ((Document)olderPackage.getMainDocumentPart().getJaxbElement()).getBody();

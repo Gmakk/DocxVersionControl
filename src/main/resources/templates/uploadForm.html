@@ -1,4 +1,9 @@
+<!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DocxVersionControl</title>
+</head>
 <body>
 
 <div th:if="${message}">
@@ -8,16 +13,30 @@
 <div>
     <form method="POST" enctype="multipart/form-data" action="/">
         <table>
-            <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-            <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+            <tr><td>Загружаемый файл:</td><td><input type="file" name="file" /></td></tr>
+            <tr><td></td><td><input type="submit" value="Загрузить" /></td></tr>
         </table>
     </form>
 </div>
 
+<h3>Загруженные файлы:</h3>
 <div>
     <ul>
         <li th:each="file : ${files}">
             <a th:href="${file}" th:text="${file}" />
+        </li>
+    </ul>
+</div>
+
+<br>
+
+<h3>Выберите какие файлы сравнивать:</h3>
+<div>
+    <ul>
+        <li th:each="pair : ${pairs}">
+            <form th:action="@{/changes}">
+                <button type="submit" th:name="pair" th:value="${pair}" th:text="${pair}"></button>
+            </form>
         </li>
     </ul>
 </div>
