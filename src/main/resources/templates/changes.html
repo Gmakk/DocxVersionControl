@@ -5,7 +5,20 @@
     <title>DocxVersionControl</title>
 </head>
 <body>
+<form th:action="@{/changes/submit}" th:object="${SelectedChangesForm}" method="post">
 
-<h3>Test changes page</h3>
+    <h3>Добавления:</h3>
+    <div th:each="item : ${changes.getDocInserts().values()}">
+        <input type="checkbox" th:value="${item.id}"  th:field="*{selectedInserts}"/>
+        <span th:text="${item}"></span><br/>
+    </div>
+    <br>
+    <h3>Удаления:</h3>
+    <div th:each="item : ${changes.getDocDels().values()}">
+        <input type="checkbox" th:value="${item.id}"  th:field="*{selectedDels}"/>
+        <span th:text="${item}"></span><br/>
+    </div>
+    <button type="submit">Сохранить</button>
+</form>
 </body>
 </html>
