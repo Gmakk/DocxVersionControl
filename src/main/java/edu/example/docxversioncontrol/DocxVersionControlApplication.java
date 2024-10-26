@@ -1,11 +1,7 @@
 package edu.example.docxversioncontrol;
 
-import edu.example.docxversioncontrol.files.async.DocInsertsAndDels;
-import edu.example.docxversioncontrol.files.async.HandleChanges;
-import edu.example.docxversioncontrol.files.comparison.CompareDocuments;
 import edu.example.docxversioncontrol.files.storage.StorageProperties;
 import edu.example.docxversioncontrol.files.storage.StorageService;
-import org.docx4j.wml.Body;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,11 +16,11 @@ public class DocxVersionControlApplication {
         SpringApplication.run(DocxVersionControlApplication.class, args);
     }
 
-//    @Bean
-//    CommandLineRunner init(StorageService storageService) {
-//        return (args) -> {
-//            storageService.deleteAll();
-//            storageService.init();
-//        };
-//    }
+    @Bean
+    CommandLineRunner init(StorageService storageService) {
+        return (args) -> {
+            storageService.deleteAll();
+            storageService.init();
+        };
+    }
 }

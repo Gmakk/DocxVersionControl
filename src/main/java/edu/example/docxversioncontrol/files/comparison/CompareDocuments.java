@@ -144,7 +144,7 @@ public class CompareDocuments {
 
 
         if (DOCX_SAVE) {
-            newerPackage.save(new File(System.getProperty("user.dir") +"/OUT_CompareDocuments.docx"));
+            newerPackage.save(new File(System.getProperty("user.dir") +"/last_changes.docx"));
         }
 
         if (PDF_SAVE) {

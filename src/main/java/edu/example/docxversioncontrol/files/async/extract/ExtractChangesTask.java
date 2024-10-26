@@ -1,27 +1,27 @@
-package edu.example.docxversioncontrol.files.async;
+package edu.example.docxversioncontrol.files.async.extract;
 
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.RunDel;
 import org.docx4j.wml.RunIns;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 
 
-public class ExtractChanges extends RecursiveAction {
+public class ExtractChangesTask extends RecursiveAction {
     //место для записи результата
     DocInsertsAndDels docInsertsAndDels;
     //текущий набор элементов, с которыми ведется работа
     List<Object> currentObjects;
 
-    public ExtractChanges(ContentAccessor currentContentAccessor, DocInsertsAndDels docInsertsAndDels) {
+    public ExtractChangesTask(ContentAccessor currentContentAccessor, DocInsertsAndDels docInsertsAndDels) {
         this.currentObjects = currentContentAccessor.getContent();
         this.docInsertsAndDels = docInsertsAndDels;
     }
 
     /**
-     * Представляет собой задание для выполнения в одном потоке в ForkJoinPool
+     * Выписывает полученные изменения из тела документа.
+     * Представляет собой задание для выполнения в одном потоке в ForkJoinPool.
      */
     @Override
     protected void compute() {
@@ -33,7 +33,7 @@ public class ExtractChanges extends RecursiveAction {
         for (Object object : currentObjects) {
             if(object instanceof ContentAccessor) {//если объект является хранилищем других объектов
                 //запускаем отдельный процесс
-                ExtractChanges newExtract = new ExtractChanges((ContentAccessor) object, docInsertsAndDels);
+                ExtractChangesTask newExtract = new ExtractChangesTask((ContentAccessor) object, docInsertsAndDels);
                 newExtract.fork();
             } else if (object instanceof RunIns) {//если объект содержит добавления
                 //берем id объекта и кладем в map с изменениями

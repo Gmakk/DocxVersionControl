@@ -33,9 +33,9 @@
 <h3>Выберите какие файлы сравнивать:</h3>
 <div>
     <ul>
-        <li th:each="pair : ${pairs}">
+        <li th:each="secondFile : ${filesToCompare}">
             <form th:action="@{/changes}">
-                <button type="submit" th:name="pair" th:value="${pair}" th:text="${pair}"></button>
+                <button type="submit" th:name="fileToCompare" th:value="${secondFile}" th:text="${secondFile}"></button>
             </form>
         </li>
     </ul>

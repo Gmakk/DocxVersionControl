@@ -5,6 +5,8 @@ import org.docx4j.wml.RunDel;
 import org.docx4j.wml.RunIns;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -12,6 +14,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @Data
 public class SelectedChangesForm {
-    private CopyOnWriteArrayList<BigInteger> selectedInserts = new CopyOnWriteArrayList<>();
-    private CopyOnWriteArrayList<BigInteger> selectedDels = new CopyOnWriteArrayList<>();
+    private List<BigInteger> selectedInserts = new ArrayList<>();
+    private List<BigInteger> selectedDels = new ArrayList<>();
 }

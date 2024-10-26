@@ -13,17 +13,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@SessionAttributes("lastChanges")
 public class FileUploadController {
 
     private final StorageService storageService;
@@ -48,13 +44,13 @@ public class FileUploadController {
         //добавляем список для отображения в виде ссылок
         model.addAttribute("files", filesLinkslist);
         //добавляем пары для выбора к сравнению
-        List<String> pairs = new ArrayList<>();
+        List<String> filesToCompare = new ArrayList<>();
         if(filenames.size() > 1){//если есть хотя бы одна пара для сравнения
-            for(int i = 0; i < filenames.size() - 1; i++){//-1, потому что последний уже не с кем сравнивать
-                pairs.add(filenames.get(i) + splitter + filenames.get(i + 1));
+            for(int i = 1; i < filenames.size(); i++){//все кроме первого, тк сравнивать начинаем с ним
+                filesToCompare.add(filenames.get(i));
             }
         }
-        model.addAttribute("pairs", pairs);
+        model.addAttribute("filesToCompare", filesToCompare);
         return "uploadForm";
     }
 
@@ -73,9 +69,17 @@ public class FileUploadController {
 
     @PostMapping("/")
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes) {
-
+                                   RedirectAttributes redirectAttributes, Model model){
+        if(file.isEmpty()){
+            redirectAttributes.addFlashAttribute("message",
+                    "Select a file to upload.");
+            return "redirect:/";
+        }
         storageService.store(file);
+        //задаем первый загруженный файл, относительно которого будем отсчитывать изменения
+        if(!model.containsAttribute("lastChanges")){
+            model.addAttribute("lastChanges", storageService.load(file.getOriginalFilename()));
+        }
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
 

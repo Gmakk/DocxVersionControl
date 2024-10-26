@@ -1,10 +1,8 @@
-package edu.example.docxversioncontrol.files.async;
+package edu.example.docxversioncontrol.files.async.extract;
 
 import lombok.Data;
-import org.docx4j.wml.CTTrackChange;
 import org.docx4j.wml.RunDel;
 import org.docx4j.wml.RunIns;
-import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
 import java.util.Map;
