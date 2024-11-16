@@ -1,6 +1,11 @@
 package edu.example.docxversioncontrol.controllers;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +13,11 @@ import edu.example.docxversioncontrol.files.storage.StorageFileNotFoundException
 import edu.example.docxversioncontrol.files.storage.StorageProperties;
 import edu.example.docxversioncontrol.files.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,9 +54,10 @@ public class FileUploadController {
         //добавляем пары для выбора к сравнению
         List<String> filesToCompare = new ArrayList<>();
         if(filenames.size() > 1){//если есть хотя бы одна пара для сравнения
-            for(int i = 1; i < filenames.size(); i++){//все кроме первого, тк сравнивать начинаем с ним
-                filesToCompare.add(filenames.get(i));
-            }
+            //все кроме первого, тк сравнивать начинаем с ним
+            filesToCompare.addAll(filenames);
+            filesToCompare.remove(((Path)model.getAttribute("lastChanges")).getFileName().toString());
+
         }
         model.addAttribute("filesToCompare", filesToCompare);
         return "uploadForm";
@@ -91,4 +100,13 @@ public class FileUploadController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/files/lastChanges")
+    public ResponseEntity<Object> getLastResultFile(Model model) throws MalformedURLException {
+        //byte[] с типом
+        Path file = (Path)model.getAttribute("lastChanges");
+        if(file == null)
+            return ResponseEntity.notFound().build();
+        Resource resource = new UrlResource(file.toUri());
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")).body(resource);
+    }
 }

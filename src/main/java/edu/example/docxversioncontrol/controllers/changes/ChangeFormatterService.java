@@ -22,8 +22,10 @@ public class ChangeFormatterService {
                 String innerText;
                 if(runContent instanceof JAXBElement<?>) {
                     innerText = ((Text)((JAXBElement<?>) runContent).getValue()).getValue();
-                }else
+                }else if(runContent instanceof Text)
                     innerText = ((Text)runContent).getValue();
+                else //DelText
+                    innerText = ((DelText)runContent).getValue();
                 return innerText;
             }
         }

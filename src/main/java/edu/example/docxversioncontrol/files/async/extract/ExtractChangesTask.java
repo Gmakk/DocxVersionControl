@@ -25,12 +25,14 @@ public class ExtractChangesTask extends RecursiveAction {
      */
     @Override
     protected void compute() {
+        System.out.println("Extracting changes task: " + this);
         //проходим по телу, если изменение - записываем в map
         //если не изменение - запускаем процесс для этого дочерний
         if (currentObjects.isEmpty()) {
             return;
         }
         for (Object object : currentObjects) {
+            //System.out.println(object);
             if(object instanceof ContentAccessor) {//если объект является хранилищем других объектов
                 //запускаем отдельный процесс
                 ExtractChangesTask newExtract = new ExtractChangesTask((ContentAccessor) object, docInsertsAndDels);

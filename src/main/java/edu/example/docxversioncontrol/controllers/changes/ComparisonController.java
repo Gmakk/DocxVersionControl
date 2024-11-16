@@ -67,9 +67,6 @@ public class ComparisonController {
 
         //обновляем Path файла с последними изменениями
         model.addAttribute("lastChanges", Path.of(System.getProperty("user.dir") +"/last_changes.docx"));
-//        System.out.println("Dels: " + changes.getDocDels().keySet());
-//        System.out.println("Inserts: " + changes.getDocInserts().keySet());
-
         return "changes";
     }
 
@@ -77,27 +74,18 @@ public class ComparisonController {
     public String saveChanges(Model model,SelectedChangesForm selectedchanges) throws Docx4JException {
         DocInsertsAndDels docInsertsAndDels = (DocInsertsAndDels) model.getAttribute("changes");
 
-        //Список выбранных изменений в виде объектов
-//        List<RunIns> selectedInserts = docInsertsAndDels.getDocInserts().entrySet().stream()
-//                .filter(pair -> selectedchanges.getSelectedInserts().contains(pair.getKey()))
-//                .map(Map.Entry::getValue)
-//                .toList();
-//
-//        List<RunDel> selectedDels = docInsertsAndDels.getDocDels().entrySet().stream()
-//                .filter(pair -> selectedchanges.getSelectedDels().contains(pair.getKey()))
-//                .map(Map.Entry::getValue)
-//                .toList();
-
         //Список выбранных изменений в виде их id
         List<BigInteger> selectedInserts = docInsertsAndDels.getDocInserts().keySet().stream()
                 .filter(runIns -> selectedchanges.getSelectedInserts().contains(runIns))
                 .toList();
 
-//        List<BigInteger> selectedDels = docInsertsAndDels.getDocDels().keySet().stream()
-//                .filter(runDel -> selectedchanges.getSelectedDels().contains(runDel))
-//                .toList();
+        List<BigInteger> selectedDels = docInsertsAndDels.getDocDels().keySet().stream()
+                .filter(runDel -> selectedchanges.getSelectedDels().contains(runDel))
+                .toList();
+
+
         //Временно выбираются все удаления автоматически
-        List<BigInteger> selectedDels = ((DocInsertsAndDels)model.getAttribute("changes")).getDocDels().keySet().stream().toList();
+        //List<BigInteger> selectedDels = ((DocInsertsAndDels)model.getAttribute("changes")).getDocDels().keySet().stream().toList();
 
 
         //загружаем результат сравнения если это первый файл, то его
@@ -110,9 +98,6 @@ public class ComparisonController {
         }catch (Docx4JException e){
             e.printStackTrace();
         }
-
-        System.out.println("Dels: " + selectedDels);
-        System.out.println("Inserts: " + selectedInserts);
         return "redirect:/";
     }
 }

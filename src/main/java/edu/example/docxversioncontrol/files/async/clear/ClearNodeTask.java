@@ -2,10 +2,7 @@ package edu.example.docxversioncontrol.files.async.clear;
 
 import edu.example.docxversioncontrol.files.async.extract.DocInsertsAndDels;
 import edu.example.docxversioncontrol.files.async.extract.ExtractChangesTask;
-import org.docx4j.wml.Body;
-import org.docx4j.wml.ContentAccessor;
-import org.docx4j.wml.RunDel;
-import org.docx4j.wml.RunIns;
+import org.docx4j.wml.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -36,6 +33,7 @@ public class ClearNodeTask extends RecursiveAction {
      */
     @Override
     protected void compute() {
+        System.out.println("ClearNodeTask start: " + this);
 //        выбранные:
 //          инсерты:
 //              убираем оболочку инсерта
@@ -53,7 +51,9 @@ public class ClearNodeTask extends RecursiveAction {
         List<Object> listToDelete = new ArrayList<>();
         Map<Integer,List<Object>> replaceMap = new HashMap<>();
         for (Object object : currentContentAccessor.getContent()) {
-            //System.out.println("Extracting " + object);
+            //System.out.println(object);
+            //ЛОМАЕТСЯ, ЕСЛИ УКАЗЫВАТЬ НЕ ВСЕ УДАЛЕНИЯ КАК НУЖНЫЕ
+
             if(object instanceof ContentAccessor) {//если объект является хранилищем других объектов
                 //запускаем отдельный процесс
                 ClearNodeTask newClear = new ClearNodeTask((ContentAccessor) object, insertsIds, delsIds);
@@ -65,12 +65,16 @@ public class ClearNodeTask extends RecursiveAction {
                     List<Object> content = ((ContentAccessor)((RunIns) object).getParent()).getContent();
                     //индекс добавления в родительском массиве элементов
                     Integer index = content.indexOf(object);
+                    System.out.println("Нужное добавление: " + index);
                     //содержимое RunIns
                     List<Object> replacements = ((RunIns) object).getCustomXmlOrSmartTagOrSdt();
                     //кладем в map для последующего замещения
                     replaceMap.put(index,replacements);
-                }else //если добавление ненужное
+                }else { //если добавление ненужное
                     listToDelete.add(object);
+                    System.out.println("Ненужное добавление: " + object);
+
+                }
             }else if (object instanceof RunDel) {//если объект содержит удаление
                 //если это ненужное удаление
                 if(!delsIds.contains(((RunDel) object).getId())){//убираем пометку об удалении, чтобы она не отображалась в документе
@@ -78,21 +82,39 @@ public class ClearNodeTask extends RecursiveAction {
                     List<Object> content = ((ContentAccessor)((RunDel) object).getParent()).getContent();
                     //индекс удаления в родительском массиве элементов
                     Integer index = content.indexOf(object);
+                    System.out.println("Ненужное удаление: " + index);
                     //содержимое RunDel
-                    List<Object> replacements = ((RunIns) object).getCustomXmlOrSmartTagOrSdt();
+                    List<Object> replacements = ((RunDel) object).getCustomXmlOrSmartTagOrSdt();//TODO: ломается здесь
                     //кладем в map для последующего замещения
                     replaceMap.put(index,replacements);
-                }else//если удаление нужное
+                }else {//если удаление нужное
                     listToDelete.add(object);
+                    System.out.println("Нужное удаление: " + object);
+
+                }
             }
         }
 
-        System.out.println(replaceMap.keySet().size());
+
+        Integer offset = 0; //тк, при замене элементов их содержимым, эти индексы смещаются, то это нужно учитывать при подстановке последующих
         for (Integer index : replaceMap.keySet()) {
-            currentContentAccessor.getContent().remove(index);
-            currentContentAccessor.getContent().addAll(index, replaceMap.get(index));
+            //избавляемся от артефактов удаления в виде DelText
+//            replaceMap.get(index).replaceAll(object -> {
+//                if(object instanceof DelText) {
+//                    Text text = ObjectFactory.get().createText();
+//                    text.setValue(((DelText) object).getValue());
+//                    return text;
+//                }
+//                return object;
+//                //else if(object instanceof InsText) {}   ??????????
+//            });
+
+
+
+            currentContentAccessor.getContent().remove(currentContentAccessor.getContent().get(index + offset));
+            currentContentAccessor.getContent().addAll(index + offset, replaceMap.get(index));//TODO: Распаковка происходит на один элемент в перед
+            offset += replaceMap.get(index).size() - 1;//-1 тк сам элемент убираем
         }
-        System.out.println(listToDelete.size());
         if(!listToDelete.isEmpty()) {
             currentContentAccessor.getContent().removeAll(listToDelete);
         }

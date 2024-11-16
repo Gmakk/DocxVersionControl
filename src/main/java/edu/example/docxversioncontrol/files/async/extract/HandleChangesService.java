@@ -27,7 +27,7 @@ public class HandleChangesService {
         //запуск первого задания
         forkJoinPool.execute(extractChangesTask);
         //ожидание, пока все не отработает
-        if(forkJoinPool.awaitQuiescence(30, TimeUnit.SECONDS))
+        if(forkJoinPool.awaitQuiescence(10, TimeUnit.SECONDS))
             log.info("ForkJoinPool has completed its work correctly");
         else
             log.error("ForkJoinPool failed to finish its work in 10 seconds");

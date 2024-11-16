@@ -13,8 +13,14 @@
 <div>
     <form method="POST" enctype="multipart/form-data" action="/">
         <table>
-            <tr><td>Загружаемый файл:</td><td><input type="file" name="file" /></td></tr>
-            <tr><td></td><td><input type="submit" value="Загрузить" /></td></tr>
+            <tr>
+                <td>Загружаемый файл:</td>
+                <td><input type="file" name="file"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value="Загрузить"/></td>
+            </tr>
         </table>
     </form>
 </div>
@@ -23,7 +29,7 @@
 <div>
     <ul>
         <li th:each="file : ${files}">
-            <a th:href="${file}" th:text="${file}" />
+            <a th:href="${file}" th:text="${file}"/>
         </li>
     </ul>
 </div>
@@ -39,6 +45,16 @@
             </form>
         </li>
     </ul>
+</div>
+
+<br>
+
+
+<div th:if="${lastChanges}">
+    <h3>Скачать текущий итог:</h3>
+    <form th:action="@{/files/lastChanges}">
+        <button type="submit" th:text="${'Скачать'}"></button>
+    </form>
 </div>
 
 </body>

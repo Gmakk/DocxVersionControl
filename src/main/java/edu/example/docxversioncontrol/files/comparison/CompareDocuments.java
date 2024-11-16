@@ -65,12 +65,11 @@ public class CompareDocuments {
     static boolean PDF_SAVE = false;
 
 
-    //TODO считать размер документа и  если большой, то включать?
     /**
      * Split up the problem to try to solve more quickly
      * (you might try this when you have 500 entries or more)
      */
-    static boolean DIVIDE_AND_CONQUER = false;
+    static boolean DIVIDE_AND_CONQUER = true;
 
 
     /**
