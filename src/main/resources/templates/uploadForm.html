@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>DocxVersionControl</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet" />
 </head>
 <body>
 
@@ -10,16 +11,16 @@
     <h2 th:text="${message}"/>
 </div>
 
-<div>
+<div class="file-upload">
     <form method="POST" enctype="multipart/form-data" action="/">
         <table>
             <tr>
                 <td>Загружаемый файл:</td>
-                <td><input type="file" name="file"/></td>
+                <td><input type="file" name="file" /></td>
             </tr>
             <tr>
                 <td></td>
-                <td><input type="submit" value="Загрузить"/></td>
+                <td><input type="submit" value="Загрузить" /></td>
             </tr>
         </table>
     </form>
@@ -41,7 +42,7 @@
     <ul>
         <li th:each="secondFile : ${filesToCompare}">
             <form th:action="@{/changes}">
-                <button type="submit" th:name="fileToCompare" th:value="${secondFile}" th:text="${secondFile}"></button>
+                <button class="button" type="submit" th:name="fileToCompare" th:value="${secondFile}" th:text="${secondFile}"></button>
             </form>
         </li>
     </ul>
@@ -53,7 +54,7 @@
 <div th:if="${lastChanges}">
     <h3>Скачать текущий итог:</h3>
     <form th:action="@{/files/lastChanges}">
-        <button type="submit" th:text="${'Скачать'}"></button>
+        <button class="button" type="submit" th:text="${'Скачать'}"></button>
     </form>
 </div>
 

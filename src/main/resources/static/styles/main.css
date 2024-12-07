@@ -1,0 +1,278 @@
+:root {
+    --background: #ffffff;
+    --text: #414856;
+    --check: #4F29F0;
+    --disabled: #C3C8DE;
+    --width: 100%;
+    --height: auto;
+    --border-radius: 5px;
+    --button-bg: #4F29F0;       /* Основной цвет кнопки */
+    --button-hover-bg: #371db3; /* Цвет кнопки при наведении */
+    --button-active-bg: #2a138c; /* Цвет кнопки при нажатии */
+    --button-disabled-bg: #C3C8DE; /* Цвет неактивной кнопки */
+    --button-text: #ffffff;     /* Цвет текста кнопки */
+    --button-border-radius: 5px; /* Радиус границы кнопки */
+    --button-padding: 10px 20px; /* Внутренние отступы кнопки */
+    --button-font-size: 16px;   /* Размер шрифта кнопки */
+    --button-transition: 0.3s ease; /* Плавный переход */
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Уменьшено расстояние между элементами */
+    max-width: var(--width);
+    overflow-y: auto; /* Позволяет прокручивать содержимое */
+    max-height: calc(100vh - 50px); /* Ограничение высоты */
+    padding: 10px;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--disabled);
+    border-radius: var(--border-radius);
+    background: var(--background);
+    transition: border-color 0.3s ease, background 0.3s ease;
+    margin-bottom: 0; /* Убираем отступы снизу */
+    cursor: pointer;
+}
+
+.checkbox-wrapper:hover {
+    border-color: var(--check);
+    background: #f0f0f5; /* Лёгкий фон при наведении */
+}
+
+.checkbox-wrapper label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%; /* Занимает всю ширину родительского элемента */
+    padding: 10px; /* Отступы внутри кликабельной области */
+    cursor: pointer;
+    height: 100%; /* Если нужно растянуть на всю высоту */
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0; /* Убираем лишние отступы */
+    position: relative;
+    appearance: none; /* Убираем стандартный стиль чекбокса */
+    border: 2px solid var(--check);
+    border-radius: 4px;
+    background-color: #fff;
+    flex-shrink: 0; /* Фиксируем размер чекбокса */
+    cursor: pointer;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked {
+    background: var(--check);
+    border-color: var(--check);
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    top: 3px; /* Исправляем позицию */
+    left: 6px; /* Исправляем позицию */
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    box-sizing: border-box;
+}
+
+.checkbox-wrapper span {
+    color: var(--text);
+    font-size: 16px;
+    user-select: none; /* Предотвращает выделение текста */
+    transition: color 0.3s ease;
+    flex-grow: 1; /* Занимает оставшееся пространство */
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + span {
+    color: var(--check);
+}
+
+
+
+
+.checkbox-wrapper span {
+    color: var(--text);
+    font-size: 16px;
+    user-select: none;
+    transition: color 0.3s ease;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + span {
+    color: var(--check);
+}
+
+
+
+
+
+
+
+li {
+    margin-bottom: 10px; /* Отступ между элементами списка */
+}
+
+li:last-child {
+    margin-bottom: 0; /* Убираем отступ у последнего элемента */
+}
+
+.button {
+    display: inline-block;
+    padding: var(--button-padding);
+    font-size: var(--button-font-size);
+    color: var(--button-text);
+    background: var(--button-bg);
+    border: none;
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    text-align: center;
+    transition: background var(--button-transition), transform var(--button-transition);
+}
+
+.button:hover {
+    background: var(--button-hover-bg);
+    transform: scale(1.05);
+}
+
+.button:active {
+    background: var(--button-active-bg);
+    transform: scale(0.95);
+}
+
+.button:disabled {
+    background: var(--button-disabled-bg);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+
+
+
+/* Общий стиль для контейнеров */
+div {
+    margin-bottom: 20px;
+}
+
+/* Стили для формы */
+form {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table td {
+    padding: 10px;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #414856;
+}
+
+input[type="file"] {
+    font-size: 14px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: var(--button-text);
+    background: var(--button-bg);
+    border: none;
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    text-align: center;
+    transition: background var(--button-transition), transform var(--button-transition);
+}
+
+input[type="submit"]:hover {
+    background: var(--button-hover-bg);
+    transform: scale(1.05);
+}
+
+input[type="submit"]:active {
+    background: var(--button-active-bg);
+    transform: scale(0.95);
+}
+
+/* Стили для списка загруженных файлов */
+h3 {
+    font-size: 18px;
+    color: #414856;
+    margin-bottom: 10px;
+}
+
+.file-upload{
+
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+ul li a {
+    color: #4F29F0;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+ul li a:hover {
+    color: #371db3;
+    text-decoration: underline;
+}
+
+
+
+body {
+    background: #E8EBF3;
+    height: 100vh;
+    font: 400 16px 'Varela Round', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .socials {
+        position: fixed;
+        display: block;
+        left: 20px;
+        bottom: 20px;
+        > a {
+            display: block;
+            width: 30px;
+            opacity: .2;
+            transform: scale(var(--scale, .8));
+            transition: transform .3s cubic-bezier(0.38,-0.12, 0.24, 1.91);
+            &:hover {
+                --scale: 1;
+            }
+        }
+    }
+}

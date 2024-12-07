@@ -3,22 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>DocxVersionControl</title>
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
 <body>
-<form th:action="@{/changes/submit}" th:object="${SelectedChangesForm}" method="post">
+
+<form th:action="@{/changes/submit}" th:object="${SelectedChangesForm}" method="post" class="checkbox-container">
 
     <h3>Добавления:</h3>
-    <div th:each="item : ${changes.getDocInserts().values()}">
-        <input type="checkbox" th:value="${item.id}"  th:field="*{selectedInserts}"/>
-        <span th:text="${@changeFormatterService.extractTextFromChange(item)}"></span><br/>
+    <div th:each="item : ${changes.getDocInserts().values()}" class="checkbox-wrapper">
+        <label>
+            <input type="checkbox" th:value="${item.id}" th:field="*{selectedInserts}"/>
+            <span th:text="${@changeFormatterService.extractTextFromChange(item)}"></span>
+        </label>
     </div>
-    <br>
+
     <h3>Удаления:</h3>
-    <div th:each="item : ${changes.getDocDels().values()}">
-        <input type="checkbox" th:value="${item.id}"  th:field="*{selectedDels}"/>
-        <span th:text="${@changeFormatterService.extractTextFromChange(item)}"></span><br/>
+    <div th:each="item : ${changes.getDocDels().values()}" class="checkbox-wrapper">
+        <label>
+            <input type="checkbox" th:value="${item.id}" th:field="*{selectedDels}"/>
+            <span th:text="${@changeFormatterService.extractTextFromChange(item)}"></span>
+        </label>
     </div>
-    <button type="submit">Сохранить</button>
+
+    <button class="button" type="submit">Сохранить</button>
 </form>
+
+
 </body>
 </html>
