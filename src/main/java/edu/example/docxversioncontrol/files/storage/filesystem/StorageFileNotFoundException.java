@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.storage;
+package edu.example.docxversioncontrol.files.storage.filesystem;
 
 public class StorageFileNotFoundException extends StorageException {
 

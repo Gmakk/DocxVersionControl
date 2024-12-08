@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.storage;
+package edu.example.docxversioncontrol.files.storage.filesystem;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,7 +10,17 @@ public class StorageProperties {
     /**
      * Место, где размещаются загруженные файлы
      */
-    private String location = "upload-dir";
+    private String sourcelocation;
+
+    /**
+     * Место, где размещаются итоговые файлы файлы
+     */
+    private String resultlocation;
+
+    /**
+     * Место, где размещаестя файл-разница
+     */
+    private String changeslocation;
 
     /**
      * Разделитель между именами файлов для интерфейса и параметров запроса

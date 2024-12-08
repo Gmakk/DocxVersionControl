@@ -1,5 +1,6 @@
 package edu.example.docxversioncontrol.files.async.extract;
 
+import lombok.extern.slf4j.Slf4j;
 import org.docx4j.wml.ContentAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +10,8 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 public class HandleChangesService {
-
-    private final static Logger log = LoggerFactory.getLogger(HandleChangesService.class);
 
     /**
      * Асинхронно получает изменения из документа, возвращает результат только после конца работы всех потоков

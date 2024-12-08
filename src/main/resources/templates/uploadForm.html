@@ -51,9 +51,9 @@
 <br>
 
 
-<div th:if="${lastChanges}">
+<div th:unless="${@fileSystemStorageService.isLastChangesEmpty()}">
     <h3>Скачать текущий итог:</h3>
-    <form th:action="@{/files/lastChanges}">
+    <form th:action="@{/files/lastResult}">
         <button class="button" type="submit" th:text="${'Скачать'}"></button>
     </form>
 </div>

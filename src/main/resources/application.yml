@@ -2,7 +2,9 @@ server:
   port: 8081
 
 storage:
-  location: upload-dir
+  sourcelocation: storage/upload-dir
+  resultlocation: storage/result-dir
+  changeslocation: storage/changes-dir
 
 spring:
   servlet:

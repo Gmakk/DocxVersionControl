@@ -8,6 +8,12 @@ import java.util.List;
 
 @Service
 public class ChangeFormatterService {
+
+    /**
+     * Получение текста, содержащегося в теге-пометке об удалении/добавлении
+     * @param change удаление/добавление
+     * @return Текст элемента
+     */
     public String extractTextFromChange(CTTrackChange change) {
         List<Object> content;
         if (change instanceof RunIns) {

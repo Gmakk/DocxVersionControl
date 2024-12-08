@@ -24,13 +24,18 @@ package edu.example.docxversioncontrol.files.comparison;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import edu.example.docxversioncontrol.files.storage.filesystem.StorageService;
 import jakarta.xml.bind.JAXBContext;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.docx4j.Docx4J;
 import org.docx4j.XmlUtils;
 import org.docx4j.convert.out.FOSettings;
@@ -49,6 +54,7 @@ import org.docx4j.wml.Body;
 import org.docx4j.wml.Document;
 
 import com.topologi.diffx.Docx4jDriver;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -56,7 +62,12 @@ import com.topologi.diffx.Docx4jDriver;
  * the result using PDF viewer.
  *
  */
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CompareDocuments {
+
+    StorageService storageService;
 
     public static JAXBContext context = org.docx4j.jaxb.Context.jc;
 
@@ -79,11 +90,11 @@ public class CompareDocuments {
      * @return тело нового документа, в котором добавления обернуты в w:ins, а удаления в w:del
      * @throws Exception
      */
-    public static Body getComparisonResult(String oldPath, String newPath) throws Exception {
+    public Body getComparisonResult(Path oldPath, Path newPath) throws Exception {
 
         // 1. Load the Packages
-        WordprocessingMLPackage newerPackage = WordprocessingMLPackage.load(new java.io.File(newPath));
-        WordprocessingMLPackage olderPackage = WordprocessingMLPackage.load(new java.io.File(oldPath));
+        WordprocessingMLPackage newerPackage = WordprocessingMLPackage.load(newPath.toFile());
+        WordprocessingMLPackage olderPackage = WordprocessingMLPackage.load(oldPath.toFile());
 
         Body newerBody = ((Document)newerPackage.getMainDocumentPart().getJaxbElement()).getBody();
         Body olderBody = ((Document)olderPackage.getMainDocumentPart().getJaxbElement()).getBody();
@@ -141,9 +152,9 @@ public class CompareDocuments {
             handleRels(pd, newerPackage.getMainDocumentPart()); // TODO: that needs work, for more complex input
         }
 
-
         if (DOCX_SAVE) {
-            newerPackage.save(new File(System.getProperty("user.dir") +"/last_changes.docx"));
+            storageService.storeChanges(newerPackage);
+//            newerPackage.save(new File(System.getProperty("user.dir") +"storage/result-dir/last_changes.docx"));
         }
 
         if (PDF_SAVE) {
