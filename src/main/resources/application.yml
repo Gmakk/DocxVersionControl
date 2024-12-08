@@ -13,7 +13,9 @@ spring:
       max-request-size: 128KB
   application:
     name: DocxVersionControl
-
+  kafka:
+    bootstrap-servers:
+      - localhost:9092
 minio:
   url: http://127.0.0.1:9000
   access:

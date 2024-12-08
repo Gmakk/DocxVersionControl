@@ -7,6 +7,8 @@ import java.util.List;
 
 import edu.example.docxversioncontrol.files.storage.filesystem.StorageFileNotFoundException;
 import edu.example.docxversioncontrol.files.storage.filesystem.StorageService;
+import edu.example.docxversioncontrol.files.storage.minio.MinioService;
+import edu.example.docxversioncontrol.messaging.NoticeMessagingServiceKafka;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,6 +31,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class FileUploadController {
 
     StorageService storageService;
+    MinioService minioService;
+    NoticeMessagingServiceKafka messagingService;
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) {
@@ -81,7 +85,7 @@ public class FileUploadController {
             storageService.storeResult(file);
         }
         redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
+                "Вы успешно загрузили " + file.getOriginalFilename() + "!");
 
         return "redirect:/";
     }
@@ -95,5 +99,13 @@ public class FileUploadController {
     public ResponseEntity<Object> getLastResultFile(Model model) throws MalformedURLException {
         Resource resource = new UrlResource(storageService.loadLastResult().toUri());
         return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")).body(resource);
+    }
+
+    @GetMapping("/notify")
+    public String sendFileURL() {
+        String fileName = storageService.loadLastResult().getFileName().toString();
+        String URL = minioService.getFileURL(fileName);
+        messagingService.sendFileURL(URL);
+        return "redirect:/";
     }
 }

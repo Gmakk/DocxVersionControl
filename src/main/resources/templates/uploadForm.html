@@ -56,6 +56,11 @@
     <form th:action="@{/files/lastResult}">
         <button class="button" type="submit" th:text="${'Скачать'}"></button>
     </form>
+
+    <h3>Разослать итог:</h3>
+    <form th:action="@{/notify}">
+        <button class="button" type="submit" th:text="${'Разослать'}"></button>
+    </form>
 </div>
 
 </body>
