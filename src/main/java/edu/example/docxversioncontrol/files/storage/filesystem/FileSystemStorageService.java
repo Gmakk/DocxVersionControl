@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import edu.example.docxversioncontrol.files.storage.minio.MinioService;
+import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.io.FileUtils;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
@@ -24,15 +26,16 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@FieldDefaults(makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FileSystemStorageService implements StorageService {
 
-    final Path sourceLocation;
-    final Path resultLocation;
-    final Path changesLocation;
+    Path sourceLocation;
+    Path resultLocation;
+    Path changesLocation;
+    MinioService minioService;
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
+    public FileSystemStorageService(StorageProperties properties, MinioService minioService) {
 
         if(properties.getResultlocation().trim().length() == 0 || properties.getSourcelocation().trim().length() == 0
                 || properties.getChangeslocation().trim().length() == 0){
@@ -42,6 +45,7 @@ public class FileSystemStorageService implements StorageService {
         this.sourceLocation = Paths.get(properties.getSourcelocation());
         this.resultLocation = Paths.get(properties.getResultlocation());
         this.changesLocation = Paths.get(properties.getChangeslocation());
+        this.minioService = minioService;
     }
 
     @Override
@@ -53,12 +57,16 @@ public class FileSystemStorageService implements StorageService {
     public void storeResult(MultipartFile file) throws IOException {
         FileUtils.cleanDirectory(resultLocation.toFile());
         storeFile(file, resultLocation);
+        minioService.deleteAll();
+        minioService.saveFile(file);
     }
 
     @Override
     public void storeResult(WordprocessingMLPackage mlPackage) throws IOException {
         FileUtils.cleanDirectory(resultLocation.toFile());
         storeMLPackage(mlPackage, resultLocation, "last_result.docx");
+        minioService.deleteAll();
+        minioService.saveFile(loadLastResultAsResource());
     }
 
     @Override
@@ -165,7 +173,7 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public Resource loadResultAsResource(String filename) {
+    public Resource loadLastResultAsResource() {
         try {
             Path file = loadLastResult();
             Resource resource = new UrlResource(file.toUri());
@@ -174,11 +182,11 @@ public class FileSystemStorageService implements StorageService {
             }
             else {
                 throw new StorageFileNotFoundException(
-                        "Could not read file: " + filename);
+                        "Could not read file: " + file.getFileName());
             }
         }
         catch (MalformedURLException e) {
-            throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+            throw new StorageFileNotFoundException("Could not read file", e);
         }
     }
 

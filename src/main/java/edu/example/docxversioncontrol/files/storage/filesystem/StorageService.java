@@ -34,7 +34,7 @@ public interface StorageService {
 
     Resource loadSourceAsResource(String filename);
 
-    Resource loadResultAsResource(String filename);
+    Resource loadLastResultAsResource();
 
     void deleteAll();
 
