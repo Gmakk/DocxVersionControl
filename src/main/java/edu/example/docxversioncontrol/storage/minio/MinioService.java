@@ -1,6 +1,6 @@
-package edu.example.docxversioncontrol.files.storage.minio;
+package edu.example.docxversioncontrol.storage.minio;
 
-import edu.example.docxversioncontrol.files.storage.filesystem.StorageFileNotFoundException;
+import edu.example.docxversioncontrol.storage.filesystem.StorageFileNotFoundException;
 import io.minio.*;
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.MinioException;

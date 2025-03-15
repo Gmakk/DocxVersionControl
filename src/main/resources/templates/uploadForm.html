@@ -12,7 +12,7 @@
 </div>
 
 <div class="file-upload">
-    <form method="POST" enctype="multipart/form-data" action="/">
+    <form method="POST" enctype="multipart/form-data" action="/uploadForm">
         <table>
             <tr>
                 <td>Загружаемый файл:</td>
@@ -41,7 +41,7 @@
 <div>
     <ul>
         <li th:each="secondFile : ${filesToCompare}">
-            <form th:action="@{/changes}">
+            <form th:action="@{'/' + ${#strings.toLowerCase(session.docType)}  + 'Changes'}">
                 <button class="button" type="submit" th:name="fileToCompare" th:value="${secondFile}" th:text="${secondFile}"></button>
             </form>
         </li>
@@ -53,13 +53,18 @@
 
 <div th:unless="${@fileSystemStorageService.isLastChangesEmpty()}">
     <h3>Скачать текущий итог:</h3>
-    <form th:action="@{/files/lastResult}">
+    <form th:action="@{/uploadForm/files/lastResult}">
         <button class="button" type="submit" th:text="${'Скачать'}"></button>
     </form>
 
     <h3>Разослать итог:</h3>
-    <form th:action="@{/notify}">
+    <form th:action="@{/uploadForm/notify}">
         <button class="button" type="submit" th:text="${'Разослать'}"></button>
+    </form>
+
+    <h3>Вернуться к выбору типа файла(текущий результат не сохранится в случае его смены)</h3>
+    <form th:action="@{/}">
+        <button class="button" type="submit" th:text="${'Вернуться'}"></button>
     </form>
 </div>
 

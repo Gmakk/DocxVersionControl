@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.storage.filesystem;
+package edu.example.docxversioncontrol.storage.filesystem;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.async.extract;
+package edu.example.docxversioncontrol.files.docx.async.extract;
 
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.RunDel;
@@ -32,7 +32,6 @@ public class ExtractChangesTask extends RecursiveAction {
             return;
         }
         for (Object object : currentObjects) {
-            //System.out.println(object);
             if(object instanceof ContentAccessor) {//если объект является хранилищем других объектов
                 //запускаем отдельный процесс
                 ExtractChangesTask newExtract = new ExtractChangesTask((ContentAccessor) object, docInsertsAndDels);

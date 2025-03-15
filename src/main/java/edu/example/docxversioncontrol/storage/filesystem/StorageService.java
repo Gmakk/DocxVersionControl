@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.storage.filesystem;
+package edu.example.docxversioncontrol.storage.filesystem;
 
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.springframework.core.io.Resource;

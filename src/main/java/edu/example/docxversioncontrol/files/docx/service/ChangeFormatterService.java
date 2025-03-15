@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.controllers.changes;
+package edu.example.docxversioncontrol.files.docx.service;
 
 import jakarta.xml.bind.JAXBElement;
 import org.docx4j.wml.*;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public class ChangeFormatterService {
-
+    //TODO конкатенация текста/ может ли среди (Object object : content) быть несколько объектов с текстом?
     /**
      * Получение текста, содержащегося в теге-пометке об удалении/добавлении
      * @param change удаление/добавление

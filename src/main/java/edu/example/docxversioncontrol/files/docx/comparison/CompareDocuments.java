@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.comparison;
+package edu.example.docxversioncontrol.files.docx.comparison;
 
 /*
  *  Copyright 2007-2008, Plutext Pty Ltd.
@@ -22,7 +22,6 @@ package edu.example.docxversioncontrol.files.comparison;
 
 
 
-import java.io.File;
 import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -30,7 +29,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import edu.example.docxversioncontrol.files.storage.filesystem.StorageService;
+import edu.example.docxversioncontrol.storage.filesystem.StorageService;
 import jakarta.xml.bind.JAXBContext;
 
 import lombok.AccessLevel;

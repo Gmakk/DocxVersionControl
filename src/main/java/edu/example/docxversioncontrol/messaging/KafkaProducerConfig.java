@@ -21,12 +21,12 @@ public class KafkaProducerConfig {
     String bootstrapAddress;
 
     @Bean
-    public ProducerFactory<Long, String> stringProducerFactory() {
+    public ProducerFactory<Long, NotificationMessage> stringProducerFactory() {
         return getProducerFactory();
     }
 
     @Bean
-    public KafkaTemplate<Long, String> stringKafkaTemplate() {
+    public KafkaTemplate<Long, NotificationMessage> stringKafkaTemplate() {
         return new KafkaTemplate<>(stringProducerFactory());
     }
 

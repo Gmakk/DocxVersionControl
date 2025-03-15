@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.async.clear;
+package edu.example.docxversioncontrol.files.docx.async.clear;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

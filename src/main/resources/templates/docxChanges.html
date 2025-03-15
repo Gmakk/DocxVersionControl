@@ -7,10 +7,10 @@
 </head>
 <body>
 
-<form th:action="@{/changes/submit}" th:object="${SelectedChangesForm}" method="post" class="checkbox-container">
+<form th:action="@{/docxChanges/submit}" th:object="${SelectedChangesForm}" method="post" class="checkbox-container">
 
     <h3>Добавления:</h3>
-    <div th:each="item : ${changes.getDocInserts().values()}" class="checkbox-wrapper">
+    <div th:each="item : ${docxChanges.getDocInserts().values()}" class="checkbox-wrapper">
         <label>
             <input type="checkbox" th:value="${item.id}" th:field="*{selectedInserts}"/>
             <span th:text="${@changeFormatterService.extractTextFromChange(item)}"></span>
@@ -18,7 +18,7 @@
     </div>
 
     <h3>Удаления:</h3>
-    <div th:each="item : ${changes.getDocDels().values()}" class="checkbox-wrapper">
+    <div th:each="item : ${docxChanges.getDocDels().values()}" class="checkbox-wrapper">
         <label>
             <input type="checkbox" th:value="${item.id}" th:field="*{selectedDels}"/>
             <span th:text="${@changeFormatterService.extractTextFromChange(item)}"></span>

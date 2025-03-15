@@ -5,10 +5,12 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.example.docxversioncontrol.files.storage.filesystem.StorageFileNotFoundException;
-import edu.example.docxversioncontrol.files.storage.filesystem.StorageService;
-import edu.example.docxversioncontrol.files.storage.minio.MinioService;
+import edu.example.docxversioncontrol.storage.filesystem.StorageFileNotFoundException;
+import edu.example.docxversioncontrol.storage.filesystem.StorageService;
+import edu.example.docxversioncontrol.storage.minio.MinioService;
+import edu.example.docxversioncontrol.files.DocumentType;
 import edu.example.docxversioncontrol.messaging.NoticeMessagingServiceKafka;
+import edu.example.docxversioncontrol.messaging.NotificationMessage;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -25,7 +27,8 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@SessionAttributes("lastChanges")
+@RequestMapping("/uploadForm")
+@SessionAttributes({"lastChanges", "docType"})
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FileUploadController {
@@ -34,8 +37,11 @@ public class FileUploadController {
     MinioService minioService;
     NoticeMessagingServiceKafka messagingService;
 
-    @GetMapping("/")
-    public String listUploadedFiles(Model model) {
+    @GetMapping
+    public String listUploadedFiles(@RequestParam(name = "docType", required = false) String docTypeString,
+                                    Model model) {
+        checkDocType(model, docTypeString);
+
         //получаем список файлов
         List<String> filenames = storageService.loadAllSourceFiles().map(
                         path -> path.getFileName().toString()).toList();
@@ -71,13 +77,13 @@ public class FileUploadController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public String handleFileUpload(@RequestParam("file") MultipartFile file,
                                    RedirectAttributes redirectAttributes, Model model) throws IOException {
         if(file.isEmpty()){
             redirectAttributes.addFlashAttribute("message",
                     "Select a file to upload.");
-            return "redirect:/";
+            return "redirect:/uploadForm";
         }
         storageService.storeUpload(file);
         //задаем первый загруженный файл, относительно которого будем отсчитывать изменения
@@ -87,7 +93,7 @@ public class FileUploadController {
         redirectAttributes.addFlashAttribute("message",
                 "Вы успешно загрузили " + file.getOriginalFilename() + "!");
 
-        return "redirect:/";
+        return "redirect:/uploadForm";
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
@@ -98,14 +104,48 @@ public class FileUploadController {
     @GetMapping("/files/lastResult")
     public ResponseEntity<Object> getLastResultFile(Model model) throws MalformedURLException {
         Resource resource = new UrlResource(storageService.loadLastResult().toUri());
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document")).body(resource);
+        return ResponseEntity.ok().contentType(getMediaType(model)).body(resource);
     }
 
     @GetMapping("/notify")
     public String sendFileURL() {
         String fileName = storageService.loadLastResult().getFileName().toString();
-        String URL = minioService.getFileURL(fileName);
-        messagingService.sendFileURL(URL);
-        return "redirect:/";
+        String url = minioService.getFileURL(fileName);
+        NotificationMessage message = new NotificationMessage(url, DocumentType.DOCX);
+        messagingService.sendFileURL(message);
+        return "redirect:/uploadForm";
+    }
+
+    /**
+     * В случае, если ранее пользователь не работал с файлами или сменил тип документа, очищает хранилище
+     *
+     * @param model model
+     * @param docTypeString новый тип документа
+     */
+    private void checkDocType(Model model, String docTypeString) {
+        if (docTypeString == null) {
+            return;
+        }
+
+        DocumentType oldDocumentType = (DocumentType) model.getAttribute("docType");
+        DocumentType newDocumentType = DocumentType.valueOf(docTypeString);
+        if(oldDocumentType == null || oldDocumentType != newDocumentType){
+            storageService.deleteAll();
+            storageService.init();
+            model.asMap().clear();
+        }
+        model.addAttribute("docType", newDocumentType);
+    }
+
+    /**
+     * Получить MediaType для актуального выбранного типа файлов
+     *
+     * @param model model
+     * @return MediaType
+     */
+    private MediaType getMediaType(Model model) {
+        DocumentType docType = (DocumentType) model.getAttribute("docType");
+        String contentType = docType != null ? docType.getContentType() : "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        return MediaType.parseMediaType(contentType);
     }
 }

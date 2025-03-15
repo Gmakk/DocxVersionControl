@@ -1,7 +1,5 @@
-package edu.example.docxversioncontrol.files.async.clear;
+package edu.example.docxversioncontrol.files.docx.async.clear;
 
-import edu.example.docxversioncontrol.files.async.extract.DocInsertsAndDels;
-import edu.example.docxversioncontrol.files.async.extract.ExtractChangesTask;
 import org.docx4j.wml.*;
 
 import java.math.BigInteger;
@@ -84,7 +82,7 @@ public class ClearNodeTask extends RecursiveAction {
                     Integer index = content.indexOf(object);
                     System.out.println("Ненужное удаление: " + index);
                     //содержимое RunDel
-                    List<Object> replacements = ((RunDel) object).getCustomXmlOrSmartTagOrSdt();//TODO: ломается здесь
+                    List<Object> replacements = ((RunDel) object).getCustomXmlOrSmartTagOrSdt();
                     //кладем в map для последующего замещения
                     replaceMap.put(index,replacements);
                 }else {//если удаление нужное
@@ -110,9 +108,12 @@ public class ClearNodeTask extends RecursiveAction {
 //            });
 
 
+            //TODO: элементы возможно изначально стоят не на своих местах
+            //TODO: проверить порядок элементов в источнике
+            //TODO: вставка содержимого происходит ровно на то же место, где был его родитель
 
             currentContentAccessor.getContent().remove(currentContentAccessor.getContent().get(index + offset));
-            currentContentAccessor.getContent().addAll(index + offset, replaceMap.get(index));//TODO: Распаковка происходит на один элемент в перед
+            currentContentAccessor.getContent().addAll(index + offset, replaceMap.get(index));//TODO: элементы сдвинуты (только вперед?) относительно правильной позиции
             offset += replaceMap.get(index).size() - 1;//-1 тк сам элемент убираем
         }
         if(!listToDelete.isEmpty()) {

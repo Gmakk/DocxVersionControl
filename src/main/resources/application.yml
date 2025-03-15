@@ -15,9 +15,9 @@ spring:
     name: DocxVersionControl
   kafka:
     bootstrap-servers:
-      - localhost:9092
+      - localhost:29092
 minio:
-  url: http://127.0.0.1:9000
+  url: http://127.0.0.1:8999
   access:
     username: minioadmin
     password: minioadmin

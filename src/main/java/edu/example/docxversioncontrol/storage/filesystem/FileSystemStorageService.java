@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.storage.filesystem;
+package edu.example.docxversioncontrol.storage.filesystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import edu.example.docxversioncontrol.files.storage.minio.MinioService;
+import edu.example.docxversioncontrol.storage.minio.MinioService;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.io.FileUtils;
@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class FileSystemStorageService implements StorageService {
+public class    FileSystemStorageService implements StorageService {
 
     Path sourceLocation;
     Path resultLocation;

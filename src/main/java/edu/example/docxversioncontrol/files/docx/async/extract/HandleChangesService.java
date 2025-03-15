@@ -1,9 +1,7 @@
-package edu.example.docxversioncontrol.files.async.extract;
+package edu.example.docxversioncontrol.files.docx.async.extract;
 
 import lombok.extern.slf4j.Slf4j;
 import org.docx4j.wml.ContentAccessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ForkJoinPool;

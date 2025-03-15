@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.storage.filesystem;
+package edu.example.docxversioncontrol.storage.filesystem;
 
 public class StorageException extends RuntimeException {
 

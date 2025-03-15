@@ -1,10 +1,10 @@
-package edu.example.docxversioncontrol.controllers.changes;
+package edu.example.docxversioncontrol.controllers.docx;
 
-import edu.example.docxversioncontrol.files.async.clear.ClearDocService;
-import edu.example.docxversioncontrol.files.async.extract.DocInsertsAndDels;
-import edu.example.docxversioncontrol.files.async.extract.HandleChangesService;
-import edu.example.docxversioncontrol.files.comparison.CompareDocuments;
-import edu.example.docxversioncontrol.files.storage.filesystem.StorageService;
+import edu.example.docxversioncontrol.files.docx.async.clear.ClearDocService;
+import edu.example.docxversioncontrol.files.docx.async.extract.DocInsertsAndDels;
+import edu.example.docxversioncontrol.files.docx.async.extract.HandleChangesService;
+import edu.example.docxversioncontrol.files.docx.comparison.CompareDocuments;
+import edu.example.docxversioncontrol.storage.filesystem.StorageService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,11 +21,11 @@ import java.nio.file.Path;
 import java.util.List;
 
 @Controller
-@RequestMapping("/changes")
-@SessionAttributes({"changes", "lastChanges"})
+@RequestMapping("/docxChanges")
+@SessionAttributes({"docxChanges", "lastChanges"})
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ComparisonController {
+public class DocxComparisonController {
 
     StorageService storageService;
     ClearDocService clearDocService;
@@ -46,15 +46,15 @@ public class ComparisonController {
         //тело документа - результата сравнения двух документов
         Body newBody =  compareDocuments.getComparisonResult(oldResult, newFile);
         //получение разницы между двумя версиями
-        DocInsertsAndDels changes = HandleChangesService.getDocumentChanges(newBody);
+        DocInsertsAndDels docxChanges = HandleChangesService.getDocumentChanges(newBody);
 
-        model.addAttribute("changes", changes);
-        return "changes";
+        model.addAttribute("docxChanges", docxChanges);
+        return "docxChanges";
     }
 
     @PostMapping("/submit")
     public String saveChanges(Model model,SelectedChangesForm selectedchanges) throws IOException, Docx4JException {
-        DocInsertsAndDels docInsertsAndDels = (DocInsertsAndDels) model.getAttribute("changes");
+        DocInsertsAndDels docInsertsAndDels = (DocInsertsAndDels) model.getAttribute("docxChanges");
 
         //Список выбранных изменений в виде их id
         List<BigInteger> selectedInserts = docInsertsAndDels.getDocInserts().keySet().stream()
@@ -75,6 +75,6 @@ public class ComparisonController {
 
         storageService.storeResult(changesPackage);
 
-        return "redirect:/";
+        return "redirect:/uploadForm";
     }
 }

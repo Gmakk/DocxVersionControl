@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NoticeMessagingServiceKafka {
 
-    KafkaTemplate<Long, String> kafkaTemplate;
+    KafkaTemplate<Long, NotificationMessage > kafkaTemplate;
 
-    public void sendFileURL(String URL) {
-        kafkaTemplate.send("notificationTopic", URL);
+    public void sendFileURL(NotificationMessage message) {
+        kafkaTemplate.send("notificationTopic", message);
     }
 }

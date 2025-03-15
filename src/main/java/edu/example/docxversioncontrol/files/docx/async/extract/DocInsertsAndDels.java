@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.async.extract;
+package edu.example.docxversioncontrol.files.docx.async.extract;
 
 import lombok.Data;
 import org.docx4j.wml.RunDel;

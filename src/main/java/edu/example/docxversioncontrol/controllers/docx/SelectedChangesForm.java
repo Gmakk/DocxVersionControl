@@ -1,13 +1,10 @@
-package edu.example.docxversioncontrol.controllers.changes;
+package edu.example.docxversioncontrol.controllers.docx;
 
 import lombok.Data;
-import org.docx4j.wml.RunDel;
-import org.docx4j.wml.RunIns;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Представляет собой выбранные пользователем изменения между двумя документами

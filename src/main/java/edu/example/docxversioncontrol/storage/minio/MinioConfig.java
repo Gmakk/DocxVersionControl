@@ -1,4 +1,4 @@
-package edu.example.docxversioncontrol.files.storage.minio;
+package edu.example.docxversioncontrol.storage.minio;
 
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
